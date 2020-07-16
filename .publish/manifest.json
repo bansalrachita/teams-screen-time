@@ -1,0 +1,65 @@
+{
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.7/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.7",
+    "version": "{version}",
+    "id": "{teamsappid}",
+    "packageName": "com.microsoft.teams.extension",
+    "developer": {
+        "name": "Rachita Bansal",
+        "websiteUrl": "{baseUrl0}",
+        "privacyUrl": "{baseUrl0}/privacy",
+        "termsOfUseUrl": "{baseUrl0}/termsofuse"
+    },
+    "icons": {
+        "color": "color.png",
+        "outline": "outline.png"
+    },
+    "name": {
+        "short": "{appname}",
+        "full": "{fullappname}"
+    },
+    "description": {
+        "short": "Short description for {appname}.",
+        "full": "Full description of {appname} for Microsoft Teams."
+    },
+    "accentColor": "#FFFFFF",
+    "bots": [],
+    "composeExtensions": [],
+    "configurableTabs": [],
+    "staticTabs": [
+        {
+            "entityId": "index",
+            "name": "Personal Tab",
+            "contentUrl": "{baseUrl0}/tab",
+            "scopes": [
+                "personal"
+            ]
+        }
+    ],
+    "permissions": [
+        "identity",
+        "messageTeamMembers"
+    ],
+    "validDomains": [],
+    "webApplicationInfo": {
+        "id": "{appclientid}",
+        "resource": "https://localhost:3000",
+        "applicationPermissions": [
+          "TeamSettings.Read.Group",
+          "ChannelSettings.Read.Group",
+          "ChannelSettings.Edit.Group",
+          "Channel.Create.Group",
+          "Channel.Delete.Group",
+          "ChannelMessage.Read.Group",
+          "TeamsApp.Read.Group",
+          "TeamsTab.Read.Group",
+          "TeamsTab.Create.Group",
+          "TeamsTab.Edit.Group",
+          "TeamsTab.Delete.Group",
+          "Member.Read.Group",
+          "Owner.Read.Group",
+          "Member.ReadWrite.Group",
+          "Owner.ReadWrite.Group"
+        ]
+   }
+}

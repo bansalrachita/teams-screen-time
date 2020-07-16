@@ -1,0 +1,52 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ensureTeamsQuitWindows",
+      "detail": "Ensure Microsoft Teams isn't running",
+      "type": "shell",
+      "command": "taskkill /IM \"teams.exe\" /F",
+      "presentation": {
+          "echo": false,
+          "reveal": "silent",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false
+      }
+    },
+    {
+      "label": "ensureTeamsQuitOSX",
+      "detail": "Ensure Microsoft Teams isn't running",
+      "type": "shell",
+      "command": "pkill 'Microsoft Teams'",
+      "presentation": {
+          "echo": false,
+          "reveal": "silent",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false
+      }
+    },
+    {
+      "label": "deployTeamsOSX",
+      "detail": "Ensure Microsoft Teams isn't running",
+      "type": "shell",
+      "command": "open -a 'Microsoft Teams' --args '--installAppPackage=${workspaceRoot}/.publish/Development.zip'",
+      "presentation": {
+          "echo": false,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false
+      }
+    },
+    {
+      "label": "debugTeamsOSX",
+      "dependsOrder": "sequence",
+      "dependsOn": ["ensureTeamsQuitOSX", "deployTeamsOSX"]
+    }
+  ]
+}
