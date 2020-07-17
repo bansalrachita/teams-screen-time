@@ -1,23 +1,28 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import * as microsoftTeams from "@microsoft/teams-js";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-
-import Privacy from "./Privacy";
-import TermsOfUse from "./TermsOfUse";
-import Tab from "./Tab";
+import * as microsoftTeams from '@microsoft/teams-js';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { microsoftTeamsSDK } from '../utils';
+import Privacy from './Privacy';
+import TermsOfUse from './TermsOfUse';
+import { Tab } from './Tab';
 
 /**
  * The main app which handles the initialization and routing
  * of the app.
  */
-function App() {
+export const App: React.FC = () => {
+  useEffect(() => {
+    microsoftTeamsSDK.initialize();
+    // microsoftTeams.initialize();
+  }, []);
+
   // Check for the Microsoft Teams SDK object.
   if (microsoftTeams) {
-
+    console.log('accessToken: ', microsoftTeamsSDK.getAccessToken());
     // Set app routings that don't require microsoft Teams
     // SDK functionality.  Show an error if trying to access the
     // Home page.
@@ -27,12 +32,9 @@ function App() {
           <Route exact path="/privacy" component={Privacy} />
           <Route exact path="/termsofuse" component={TermsOfUse} />
           <Route exact path="/tab" component={TeamsHostError} />
-        </Router>        
+        </Router>
       );
     }
-
-    // Initialize the Microsoft Teams SDK
-    microsoftTeams.initialize(window);
 
     // Display the app home page hosted in Teams
     return (
@@ -44,10 +46,8 @@ function App() {
 
   // Error when the Microsoft Teams SDK is not found
   // in the project.
-  return (
-    <h3>Microsoft Teams SDK not found.</h3>
-  );
-}
+  return <h3>Microsoft Teams SDK not found.</h3>;
+};
 
 /**
  * This component displays an error message in the
@@ -62,5 +62,3 @@ class TeamsHostError extends React.Component {
     );
   }
 }
-
-export default App;

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.7/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.7",
+  "version": "1.0.0",
+  "id": "f04c2cca-6c30-46d6-bbcc-095ebf59f9f9",
+  "packageName": "com.microsoft.teams.extension",
+  "developer": {
+    "name": "Rachita Bansal",
+    "websiteUrl": "https://d7410907d884.ngrok.io",
+    "privacyUrl": "https://d7410907d884.ngrok.io/privacy",
+    "termsOfUseUrl": "https://d7410907d884.ngrok.io/termsofuse"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "teams-screen-timer",
+    "full": "teams-screen-timer"
+  },
+  "description": {
+    "short": "Short description for teams-screen-timer.",
+    "full": "Full description of teams-screen-timer for Microsoft Teams."
+  },
+  "accentColor": "#FFFFFF",
+  "bots": [],
+  "composeExtensions": [],
+  "configurableTabs": [],
+  "staticTabs": [
+    {
+      "entityId": "index",
+      "name": "Personal Tab",
+      "contentUrl": "https://d7410907d884.ngrok.io/tab?inTeamsSSO=true",
+      "scopes": ["personal"]
+    }
+  ],
+  "permissions": ["identity", "messageTeamMembers"],
+  "validDomains": [],
+  "webApplicationInfo": {
+    "id": "625ae2e7-df68-48d2-b538-50eeed288578",
+    "resource": "https://d7410907d884.ngrok.io"
+  }
+}
