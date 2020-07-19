@@ -4,12 +4,17 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import * as microsoftTeams from '@microsoft/teams-js';
+import { microsoftTeamsSDK } from '../utils';
 
 /**
  * The 'PersonalTab' component renders the main tab content
  * of your app.
  */
 export const Tab: React.FC = () => {
+  useEffect(() => {
+    microsoftTeamsSDK.initialize();
+  }, []);
+
   const [context, setContext] = useState<microsoftTeams.Context | undefined>();
 
   //React lifecycle method that gets called once a component has finished mounting

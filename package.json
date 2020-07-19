@@ -19,6 +19,7 @@
     "@types/node": "^14.0.23",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
+    "query-string-params": "^1.7.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",

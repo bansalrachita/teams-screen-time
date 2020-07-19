@@ -10944,6 +10944,11 @@
         "strict-uri-encode": "^1.0.0"
       }
     },
+    "query-string-params": {
+      "version": "1.7.5",
+      "resolved": "https://registry.npmjs.org/query-string-params/-/query-string-params-1.7.5.tgz",
+      "integrity": "sha512-Chg+UIbu4f733dRdfADXVrDq35jD3DHavyRqZQRGqHLQ5oEd4YxJfjAiv+UtI0KIVjoStJ3cvroxVA1YfL+lNg=="
+    },
     "querystring": {
       "version": "0.2.0",
       "resolved": "https://registry.npmjs.org/querystring/-/querystring-0.2.0.tgz",

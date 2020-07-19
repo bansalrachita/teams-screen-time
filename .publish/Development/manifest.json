@@ -6,9 +6,9 @@
   "packageName": "com.microsoft.teams.extension",
   "developer": {
     "name": "Rachita Bansal",
-    "websiteUrl": "https://d7410907d884.ngrok.io",
-    "privacyUrl": "https://d7410907d884.ngrok.io/privacy",
-    "termsOfUseUrl": "https://d7410907d884.ngrok.io/termsofuse"
+    "websiteUrl": "https://www.microsoft.com",
+    "privacyUrl": "https://www.microsoft.com/privacy",
+    "termsOfUseUrl": "https://www.microsoft.com/termsofuse"
   },
   "icons": {
     "color": "color.png",
@@ -28,16 +28,16 @@
   "configurableTabs": [],
   "staticTabs": [
     {
-      "entityId": "index",
-      "name": "Personal Tab",
-      "contentUrl": "https://d7410907d884.ngrok.io/tab?inTeamsSSO=true",
+      "entityId": "com.microsoft.teamsscreentime.static",
+      "name": "Analyze",
+      "contentUrl": "https://cd6e5e5cc9d6.ngrok.io/tab",
       "scopes": ["personal"]
     }
   ],
-  "permissions": ["identity", "messageTeamMembers"],
+  "permissions": [],
   "validDomains": [],
   "webApplicationInfo": {
     "id": "625ae2e7-df68-48d2-b538-50eeed288578",
-    "resource": "https://d7410907d884.ngrok.io"
+    "resource": "api://cd6e5e5cc9d6.ngrok.io/625ae2e7-df68-48d2-b538-50eeed288578"
   }
 }
