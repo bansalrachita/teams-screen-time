@@ -9,7 +9,7 @@ class MicrosoftTeamsSDK {
 
   public initialize = async () => {
     try {
-      this.login();
+      await this.login();
     } catch (error) {
       throw new Error('Error authenticating the user: ' + error.message);
     }
@@ -24,7 +24,6 @@ class MicrosoftTeamsSDK {
       microsoftTeams.authentication.getAuthToken({
         resources: this.resources,
         successCallback: (accessToken: string) => {
-          console.log('accessToken: ', accessToken);
           resolve(accessToken);
         },
         failureCallback: (reason) => {
@@ -61,7 +60,7 @@ class MicrosoftTeamsSDK {
 
             fetch(url, {
               method: 'POST',
-              body: `client_id=${params.client_id}&client_secret=${params.client_secret}&grant_type=${params.grant_type}&assertion=${token}&requested_token_use=${params.requested_token_use}&scope=${params.scope[0]}`,
+              body: `client_id=${params.client_id}&client_secret=${params.client_secret}&grant_type=${params.grant_type}&assertion=${token}&requested_token_use=${params.requested_token_use}&scope=${params.scope}`,
               headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -70,7 +69,6 @@ class MicrosoftTeamsSDK {
             }).then((result) => {
               if (result.status !== 200) {
                 result.json().then((json) => {
-                  console.log('json: ', json);
                   // TODO: Check explicitly for invalid_grant or interaction_required
                   rej(json.error);
                 });
@@ -86,7 +84,6 @@ class MicrosoftTeamsSDK {
         try {
           const access_token = await oboPromise();
           const serverSideToken = access_token;
-          console.log(serverSideToken);
           resolve(serverSideToken);
         } catch (error) {
           reject(error);
@@ -96,7 +93,7 @@ class MicrosoftTeamsSDK {
   };
 
   // Show the consent pop-up
-  public requestConsent = async (): Promise<string | null> => {
+  public requestConsent = (): Promise<string> => {
     return new Promise((resolve, reject) => {
       microsoftTeams.authentication.authenticate({
         url: window.location.origin + '/authstart',
@@ -104,7 +101,7 @@ class MicrosoftTeamsSDK {
         height: 535,
         successCallback: (result) => {
           console.log('result: ', result);
-          let data = localStorage.getItem(result ?? '');
+          let data = localStorage.getItem(result ?? '') ?? '';
           localStorage.removeItem(result ?? '');
           resolve(data);
         },
@@ -117,24 +114,24 @@ class MicrosoftTeamsSDK {
   };
 
   // 3. Get the server side token and use it to call the Graph API
-  public useServerSideToken = async (data: string | null): Promise<void> => {
-    console.log(
-      '3. Call https://graph.microsoft.com/v1.0/me/ with the server side token'
-    );
+  public useServerSideToken = async (): Promise<void> => {
     try {
-      const response = await fetch('https://graph.microsoft.com/v1.0/me/', {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          authorization: 'bearer ' + data,
-        },
-        mode: 'cors',
-        cache: 'default',
-      });
+      const response = await fetch(
+        'https://graph.microsoft.com/beta/teams/f1f3b799-bf17-4da9-85f1-6e56a7f14abb/channels/19:3e0a7a9b2de6421f806da28cee62f7f4@thread.tacv2/messages',
+        {
+          method: 'GET',
+          headers: {
+            accept: 'application/json',
+            authorization: 'bearer ' + this._accessToken,
+          },
+          mode: 'cors',
+          cache: 'default',
+        }
+      );
       if (response.ok) {
         const profile = await response.json();
         console.log(JSON.stringify(profile, undefined, 4), 'pre');
-        return response.json();
+        return profile;
       } else {
       }
     } catch (error) {
@@ -146,19 +143,17 @@ class MicrosoftTeamsSDK {
     try {
       const clientToken = await this.fetchAccessToken();
       this._accessToken = await this.getServerSideToken(clientToken);
-      console.log('_accessToken: ', this._accessToken);
+      this.useServerSideToken();
     } catch (error) {
-      console.log('error: ', error);
       if (error === 'invalid_grant') {
         console.log(`Error: ${error} - user or admin consent required`);
         try {
           const result = await this.requestConsent();
-          console.log('result: ', result);
           if (result) {
             // Consent succeeded - use the token we got back
             let accessToken = JSON.parse(result).accessToken;
             console.log(`Received access token ${accessToken}`);
-            this.useServerSideToken(accessToken);
+            this._accessToken = accessToken;
           }
         } catch (error) {
           console.log(`ERROR ${error}`);

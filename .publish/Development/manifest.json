@@ -30,14 +30,14 @@
     {
       "entityId": "com.microsoft.teamsscreentime.static",
       "name": "Analyze",
-      "contentUrl": "https://cd6e5e5cc9d6.ngrok.io/tab",
+      "contentUrl": "https://6f3c7c8328c7.ngrok.io/tab",
       "scopes": ["personal"]
     }
   ],
-  "permissions": [],
-  "validDomains": [],
+  "permissions": ["identity", "messageTeamMembers"],
+  "validDomains": ["*.ngrok.io", "*.microsoft.com"],
   "webApplicationInfo": {
     "id": "625ae2e7-df68-48d2-b538-50eeed288578",
-    "resource": "api://cd6e5e5cc9d6.ngrok.io/625ae2e7-df68-48d2-b538-50eeed288578"
+    "resource": "api://6f3c7c8328c7.ngrok.io/625ae2e7-df68-48d2-b538-50eeed288578"
   }
 }

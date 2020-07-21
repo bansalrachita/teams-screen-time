@@ -1,4 +1,5 @@
 import React from 'react';
+import * as microsoftTeams from '@microsoft/teams-js';
 
 function _decimalToHex(number: number) {
   var hex = number.toString(16);
@@ -76,18 +77,17 @@ function toQueryString(queryParams: {
 }
 
 export const Authenticate: React.FC = () => {
-  console.log('imhere');
   microsoftTeams.getContext(function (context) {
     let state = _guid();
-    console.log('state: ', state);
     localStorage.setItem('auth.state', state ?? '');
     localStorage.removeItem('auth.error');
     let queryParams = {
       client_id: '625ae2e7-df68-48d2-b538-50eeed288578',
-      response_type: 'id_token',
+      response_type: 'id_token token',
       response_mode: 'fragment',
-      scope: ['https://graph.microsoft.com/User.Read'],
-      offline_access: true,
+      scope: [
+        'https://graph.microsoft.com/User.Read email openid profile offline_access',
+      ],
       redirect_uri: window.location.origin + '/authend',
       nonce: _guid(),
       state: state,
