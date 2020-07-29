@@ -12,18 +12,13 @@
     "@fluentui/react-northstar": "^0.49.0",
     "@microsoft/microsoft-graph-client": "^2.0.0",
     "@microsoft/teams-js": "^1.7.0",
-    "@testing-library/jest-dom": "^5.11.1",
-    "@testing-library/react": "^10.4.7",
-    "@testing-library/user-event": "^12.0.11",
-    "@types/jest": "^26.0.4",
-    "@types/node": "^14.0.23",
-    "@types/react": "^16.9.43",
-    "@types/react-dom": "^16.9.8",
+    "moment": "^2.27.0",
     "query-string-params": "^1.7.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "recharts": "^1.8.5",
     "typescript": "^3.9.7"
   },
   "devDependencies": {
@@ -34,7 +29,7 @@
     "@types/node": "^14.0.23",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
-    "@types/react": "^16.9.43"
+    "@types/recharts": "^1.8.14"
   },
   "eslintConfig": {
     "extends": "react-app"

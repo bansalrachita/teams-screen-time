@@ -7,11 +7,7 @@
             "request": "launch",
             "stopOnEntry": false,
             "windows": {
-                "preLaunchTask": "ensureTeamsQuitWindows",
-                "runtimeExecutable": "${env:LOCALAPPDATA}/Microsoft/Teams/current/teams.exe",
-                "runtimeArgs": [
-                    "--installAppPackage=${workspaceRoot}/.publish/Development.zip"
-                ]
+                "preLaunchTask": "debugTeamsWindows"
             },
             "osx": {
                 "preLaunchTask": "debugTeamsOSX"

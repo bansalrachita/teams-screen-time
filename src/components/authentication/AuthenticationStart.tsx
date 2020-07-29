@@ -76,7 +76,7 @@ function toQueryString(queryParams: {
   return encodedQueryParams.join('&');
 }
 
-export const Authenticate: React.FC = () => {
+export const AuthenticationStart: React.FC = () => {
   microsoftTeams.getContext(function (context) {
     let state = _guid();
     localStorage.setItem('auth.state', state ?? '');

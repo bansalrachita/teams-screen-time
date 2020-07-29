@@ -1,15 +1,12 @@
 import * as microsoftTeams from '@microsoft/teams-js';
 
-class MicrosoftTeamsSDK {
-  private _accessToken: string | null = null;
-  public readonly resources: string[] = [
-    // 'https://graph.microsoft.com',
-    'https://5b60d8ade181.ngrok.io',
-  ];
+class Authentication {
+  private _accessToken: string | undefined = undefined;
+  public readonly resources: string[] = ['https://03d629d3c460.ngrok.io'];
 
-  public initialize = async () => {
+  public initialize = async (callback: (val?: string) => void) => {
     try {
-      await this.login();
+      await this.login(callback);
     } catch (error) {
       throw new Error('Error authenticating the user: ' + error.message);
     }
@@ -40,7 +37,6 @@ class MicrosoftTeamsSDK {
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       microsoftTeams.getContext(async (context) => {
-        console.log('context: ', context);
         const tid = context.tid;
         const token = clientSideToken;
         const scopes = ['https://graph.microsoft.com/User.Read'];
@@ -64,7 +60,7 @@ class MicrosoftTeamsSDK {
               headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
-                mode: 'no-cors',
+                mode: 'cors',
               },
             }).then((result) => {
               if (result.status !== 200) {
@@ -83,8 +79,7 @@ class MicrosoftTeamsSDK {
 
         try {
           const access_token = await oboPromise();
-          const serverSideToken = access_token;
-          resolve(serverSideToken);
+          resolve(access_token);
         } catch (error) {
           reject(error);
         }
@@ -100,12 +95,15 @@ class MicrosoftTeamsSDK {
         width: 600,
         height: 535,
         successCallback: (result) => {
-          console.log('result: ', result);
           let data = localStorage.getItem(result ?? '') ?? '';
           localStorage.removeItem(result ?? '');
           resolve(data);
         },
         failureCallback: (reason) => {
+          const result = 'auth.result';
+          let data = localStorage.getItem(result ?? '') ?? '';
+          this._accessToken = data;
+          localStorage.removeItem(result ?? '');
           console.log('reason: ', reason);
           reject(JSON.stringify(reason));
         },
@@ -113,37 +111,10 @@ class MicrosoftTeamsSDK {
     });
   };
 
-  // 3. Get the server side token and use it to call the Graph API
-  public useServerSideToken = async (): Promise<void> => {
-    try {
-      const response = await fetch(
-        'https://graph.microsoft.com/beta/teams/f1f3b799-bf17-4da9-85f1-6e56a7f14abb/channels/19:3e0a7a9b2de6421f806da28cee62f7f4@thread.tacv2/messages',
-        {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            authorization: 'bearer ' + this._accessToken,
-          },
-          mode: 'cors',
-          cache: 'default',
-        }
-      );
-      if (response.ok) {
-        const profile = await response.json();
-        console.log(JSON.stringify(profile, undefined, 4), 'pre');
-        return profile;
-      } else {
-      }
-    } catch (error) {
-      throw new Error(`Error ${error}`);
-    }
-  };
-
-  public login = async (): Promise<void> => {
+  public login = async (callback: (val?: string) => void): Promise<void> => {
     try {
       const clientToken = await this.fetchAccessToken();
       this._accessToken = await this.getServerSideToken(clientToken);
-      this.useServerSideToken();
     } catch (error) {
       if (error === 'invalid_grant') {
         console.log(`Error: ${error} - user or admin consent required`);
@@ -159,8 +130,10 @@ class MicrosoftTeamsSDK {
           console.log(`ERROR ${error}`);
         }
       }
+    } finally {
+      callback(this._accessToken);
     }
   };
 }
 
-export const microsoftTeamsSDK = new MicrosoftTeamsSDK();
+export default new Authentication();
