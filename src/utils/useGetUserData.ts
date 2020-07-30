@@ -24,11 +24,11 @@ export const useGetUserData = (
   const fetchUserData = useCallback(
     async (teamsAndChannelsData: ChannelsAndTeams[]) => {
       if (!channelUserData && teamsAndChannelsData) {
-        fetchChannelMessages(teamsAndChannelsData);
+        fetchChannelMessages(teamsAndChannelsData, userObjectId);
         fetchAllChats();
       }
     },
-    [fetchChannelMessages, channelUserData, fetchAllChats]
+    [fetchChannelMessages, channelUserData, fetchAllChats, userObjectId]
   );
 
   useEffect(() => {

@@ -20,7 +20,7 @@ export const getBarChartData = (
         name: channelObj?.[channel].displayName,
         totalReadHours:
           channelObj?.[channel].totalActiveHours -
-          channelObj?.[channel].totalActiveHours,
+          channelObj?.[channel].totalWriteHours,
         totalWriteHours: channelObj?.[channel].totalWriteHours,
       });
     }

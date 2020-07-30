@@ -33,7 +33,7 @@ export const CustomBarChart: React.FC<CustomBarChartProps<
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis type="number" domain={[0, 23]} />
+      <XAxis type="number" domain={[1, 24]} />
       <YAxis dataKey="name" type="category" />
       <Tooltip />
       <Legend />

@@ -51,7 +51,8 @@ const getHourOfDay = (time: string) => {
 
 export const deriveUserData = (
   messageData: any,
-  metaData: { [name: string]: string }
+  metaData: { [name: string]: string },
+  userObjectId: string
 ) => {
   for (let element of messageData.value) {
     let user: User = {
@@ -126,6 +127,26 @@ export const deriveUserData = (
       }
     }
   }
+
+  for (let element of messageData.value) {
+    const userId: string = element.from.user.id;
+
+    if (users[userId].id !== userObjectId) {
+      const teamId: string = element.channelIdentity.teamId;
+      const channelId: string = element.channelIdentity.channelId;
+      const message = element.body.content;
+      const messageReadTime = calculateMessageReadTime(message);
+      // if there some user activity in the team and channel
+      const userChannel =
+        users[userObjectId]?.teams?.[teamId]?.channels?.[channelId];
+      const userTeam = users[userObjectId]?.teams?.[teamId];
+
+      if (userChannel && userTeam) {
+        userChannel.totalActiveHours += messageReadTime;
+        userTeam.activeHours += messageReadTime;
+      }
+    }
+  }
 };
 
 const WORDS_READ_PER_MINUTE = 238;
@@ -135,15 +156,14 @@ const LETTERS_WRITE_PER_SECOND = (WORDS_WRITE_PER_MINUTE * 6) / 60;
 
 export const calculateMessageReadTime = (message: string) => {
   const messageLength = message.length; // TODO: very raw right now. Needs html text sanitization etc.
-  const timeToReadMessage = messageLength / (LETTERS_READ_PER_SECOND * 60 * 60);
+  const timeToReadMessage = messageLength / (LETTERS_READ_PER_SECOND * 60);
 
   return Math.round((timeToReadMessage + Number.EPSILON) * 100) / 100;
 };
 
 export const calculateMessageWriteTime = (message: string) => {
   const messageLength = message.length; // TODO: very raw right now. Needs html text sanitization etc.
-  const timeToWriteMessage =
-    messageLength / (LETTERS_WRITE_PER_SECOND * 60 * 60);
+  const timeToWriteMessage = messageLength / (LETTERS_WRITE_PER_SECOND * 60);
 
   return Math.round((timeToWriteMessage + Number.EPSILON) * 100) / 100;
 };

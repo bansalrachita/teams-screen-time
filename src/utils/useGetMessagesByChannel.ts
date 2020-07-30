@@ -10,7 +10,7 @@ export const useGetMessagesByChannel = () => {
   const [error, setError] = useState<string | undefined>();
 
   const fetchMessagesByChannelIdAndTeamId = useCallback(
-    async ({ teamId, channelId, teamName, channelName }) => {
+    async ({ teamId, channelId, teamName, channelName }, userObjectId) => {
       try {
         const response = await fetch(
           `https://graph.microsoft.com/beta/teams/${teamId}/channels/${decodeURIComponent(
@@ -28,7 +28,7 @@ export const useGetMessagesByChannel = () => {
         );
         if (response.ok) {
           const data = await response.json();
-          deriveUserData(data, { teamName, channelName });
+          deriveUserData(data, { teamName, channelName }, userObjectId);
         } else {
           throw new Error('Something went wrong.');
         }
@@ -40,23 +40,25 @@ export const useGetMessagesByChannel = () => {
   );
 
   const fetchMessages = useCallback(
-    (channelAndTeams: ChannelsAndTeams[]) => {
+    (channelAndTeams: ChannelsAndTeams[], userObjectId) => {
       const queries = [];
       for (let team of channelAndTeams) {
         for (let channel of team.value) {
           queries.push(
-            fetchMessagesByChannelIdAndTeamId({
-              teamId: team.id,
-              channelId: channel.id,
-              channelName: channel.displayName,
-              teamName: team.displayName,
-            })
+            fetchMessagesByChannelIdAndTeamId(
+              {
+                teamId: team.id,
+                channelId: channel.id,
+                channelName: channel.displayName,
+                teamName: team.displayName,
+              },
+              userObjectId
+            )
           );
         }
       }
 
       Promise.allSettled(queries).then((results) => {
-        console.log('results: ', results);
         for (let result of results) {
           if (result.status === 'rejected') {
             setError(result.reason);
