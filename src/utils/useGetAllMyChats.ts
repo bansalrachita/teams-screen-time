@@ -1,9 +1,10 @@
 import { useAuthenticationContext } from '../components/authentication-context/AuthenticationContext';
 import { useState, useCallback } from 'react';
+import { Chat } from './deriveUserData';
 
 export const useGetAllMyChats = () => {
   const accessToken = useAuthenticationContext();
-  const [data, setData] = useState();
+  const [data, setData] = useState<Chat[]>();
   const [error, setError] = useState<string | undefined>();
 
   const fetchResult = useCallback(async () => {
@@ -22,7 +23,7 @@ export const useGetAllMyChats = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        setData(data);
+        setData(data.value);
       } else {
         setError('Something went wrong.');
       }

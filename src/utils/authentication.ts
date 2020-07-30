@@ -2,7 +2,7 @@ import * as microsoftTeams from '@microsoft/teams-js';
 
 class Authentication {
   private _accessToken: string | undefined = undefined;
-  public readonly resources: string[] = ['https://03d629d3c460.ngrok.io'];
+  public readonly resources: string[] = ['https://5a70e06bcf2f.ngrok.io'];
 
   public initialize = async (callback: (val?: string) => void) => {
     try {

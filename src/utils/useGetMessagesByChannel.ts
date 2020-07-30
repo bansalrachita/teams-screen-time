@@ -10,7 +10,7 @@ export const useGetMessagesByChannel = () => {
   const [error, setError] = useState<string | undefined>();
 
   const fetchMessagesByChannelIdAndTeamId = useCallback(
-    async (teamId: string, channelId: string) => {
+    async ({ teamId, channelId, teamName, channelName }) => {
       try {
         const response = await fetch(
           `https://graph.microsoft.com/beta/teams/${teamId}/channels/${decodeURIComponent(
@@ -28,7 +28,7 @@ export const useGetMessagesByChannel = () => {
         );
         if (response.ok) {
           const data = await response.json();
-          deriveUserData(data);
+          deriveUserData(data, { teamName, channelName });
         } else {
           throw new Error('Something went wrong.');
         }
@@ -44,7 +44,14 @@ export const useGetMessagesByChannel = () => {
       const queries = [];
       for (let team of channelAndTeams) {
         for (let channel of team.value) {
-          queries.push(fetchMessagesByChannelIdAndTeamId(team.id, channel.id));
+          queries.push(
+            fetchMessagesByChannelIdAndTeamId({
+              teamId: team.id,
+              channelId: channel.id,
+              channelName: channel.displayName,
+              teamName: team.displayName,
+            })
+          );
         }
       }
 

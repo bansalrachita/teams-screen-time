@@ -1,52 +1,66 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-import React, { useEffect } from 'react';
-import { useGetMessagesByChannel } from '../../utils';
+import React, { useEffect, useMemo } from 'react';
 import { useGetChannelByTeams } from '../../utils/useGetChannelsByTeams';
 import { CustomPieChart } from '../charts/CustomPieCharts';
-import { CustomDropdown } from '../drop-down/CustomDropDown';
+import { CustomDropdown } from '../dropdown/CustomDropdown';
 import { useTeamsContext } from '../../utils/useThemeContext';
-import { Flex } from '@fluentui/react-northstar';
+import { Flex, Header } from '@fluentui/react-northstar';
+import { CustomBarChart } from '../charts/CustomBarChart';
+import { ActivityHours } from '../charts/ActivityHours';
+import { getPieChartData } from '../../utils/getPieChartData';
+import { getBarChartData } from '../../utils/getBarChartData';
+import { useGetUserData } from '../../utils/useGetUserData';
 
+const inputTimeItems = ['Today', 'yesterday', 'Last 7 days', 'Last 30 days'];
 /**
  * The 'PersonalTab' component renders the main tab content
  * of your app.
  */
 export const Tab: React.FC = () => {
-  const { data, fetchData } = useGetMessagesByChannel();
   const { data: teamsAndChannelsData } = useGetChannelByTeams();
   const [context] = useTeamsContext();
-  // const {
-  //   fetchResult: fetchAllMessageByChatId,
-  //   data: allMessages,
-  // } = useGetAllMessagesByChatId();
-
-  // const { fetchResult: fetchAllChats, data: allChats } = useGetAllMyChats();
-  console.log('data: ', data);
-  // console.log('allChats: ', allChats);
-  // console.log('allMessages: ', allMessages);
+  let userId = (context && context['userObjectId']) ?? '';
+  const { data: usersData, fetchResult: fetchUserData } = useGetUserData(
+    userId
+  );
+  const usersTeamsData = usersData?.teams;
 
   useEffect(() => {
-    if (!data && teamsAndChannelsData) {
-      fetchData(teamsAndChannelsData);
-      // fetchAllChats();
-      // fetchAllMessageByChatId(
-      //   '19:0b736906-3bd6-48bd-bf88-3abc6858c145_0baf191e-9901-42d4-b832-7021145caa61@unq.gbl.spaces'
-      // );
+    if (!usersData && teamsAndChannelsData) {
+      fetchUserData(teamsAndChannelsData);
     }
-  }, [fetchData, data, teamsAndChannelsData]);
+  }, [fetchUserData, usersData, teamsAndChannelsData]);
 
-  let userName =
-    context && Object.keys(context).length > 0 ? context['upn'] : '';
+  const channelsPieChartData = useMemo(() => getPieChartData(usersTeamsData), [
+    usersTeamsData,
+  ]);
+
+  const channelsBarChartData = useMemo(() => getBarChartData(usersTeamsData), [
+    usersTeamsData,
+  ]);
 
   return (
-    <Flex styles={{ padding: '30px' }}>
+    <Flex styles={{ padding: '30px' }} column>
+      <Header content="Channel activity" />
       <Flex gap="gap.medium">
-        <CustomDropdown />
-        <CustomDropdown />
+        <CustomDropdown
+          inputItems={teamsAndChannelsData}
+          uniqueKey="displayName"
+          placeholder="Select a team"
+        />
+        <CustomDropdown
+          inputItems={inputTimeItems}
+          placeholder="Select a time"
+          checkable
+        />
       </Flex>
-      <CustomPieChart />
+      <Flex gap="gap.medium" vAlign="center" hAlign="start">
+        <CustomPieChart data={channelsPieChartData} />
+        <CustomBarChart
+          data={channelsBarChartData}
+          stackDataKeys={['totalWriteHours', 'totalReadHours']}
+        />
+      </Flex>
+      <ActivityHours data={usersData?.activeHours ?? []} />
     </Flex>
   );
 };

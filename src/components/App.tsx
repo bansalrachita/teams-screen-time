@@ -24,7 +24,7 @@ export const App: React.FC = () => {
     // Display the app home page hosted in Teams
     return (
       <Router>
-        <Provider theme={theme}>
+        <Provider theme={theme} styles={{ height: '100vh' }}>
           <Route exact path="/authend" component={AuthenticationEnd} />
           <Route exact path="/authstart" component={AuthenticationStart} />
           <ProtectedRoute exact path="/tab" component={Tab} />

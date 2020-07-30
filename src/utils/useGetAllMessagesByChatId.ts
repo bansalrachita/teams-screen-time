@@ -1,12 +1,13 @@
 import { useAuthenticationContext } from '../components/authentication-context/AuthenticationContext';
 import { useState, useCallback } from 'react';
+import { Chat, users, User, deriveChatUserData } from '../utils/deriveUserData';
 
-export const useGetAllMessagesByChatId = () => {
+export const useGetAllMessagesByChatId = (userObjectId: string) => {
   const accessToken = useAuthenticationContext();
-  const [data, setData] = useState();
+  const [data, setData] = useState<User>();
   const [error, setError] = useState<string | undefined>();
 
-  const fetchResult = useCallback(
+  const fetchResultByChatId = useCallback(
     async (chatId: string) => {
       try {
         const response = await fetch(
@@ -23,15 +24,35 @@ export const useGetAllMessagesByChatId = () => {
         );
         if (response.ok) {
           const data = await response.json();
-          setData(data);
+          deriveChatUserData(data, userObjectId);
         } else {
-          setError('Something went wrong.');
+          throw new Error('Something went wrong.');
         }
       } catch (error) {
-        setError(error.message);
+        throw new Error(error.message);
       }
     },
-    [accessToken]
+    [accessToken, userObjectId]
+  );
+
+  const fetchResult = useCallback(
+    async (chatList: Chat[]) => {
+      const chatQueries = [];
+      for (let chatId of chatList) {
+        chatQueries.push(fetchResultByChatId(chatId.id));
+      }
+
+      Promise.allSettled(chatQueries).then((results) => {
+        for (let i = 0; i < results.length; ++i) {
+          const result = results[i];
+          if (result.status === 'rejected') {
+            setError(result.reason);
+          }
+        }
+        setData(users[userObjectId]);
+      });
+    },
+    [fetchResultByChatId, userObjectId]
   );
 
   return { fetchResult, data, error };
