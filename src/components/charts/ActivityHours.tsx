@@ -14,9 +14,9 @@ const getContent = (data: number[]) => {
     .map((_value, index) => {
       return (
         <Tooltip
+          key={`flexItem-${index}`}
           trigger={
             <Flex
-              key={`flexItem-${index}`}
               styles={{
                 margin: '3px',
                 background: `${brightness(data[index])}`,

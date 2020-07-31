@@ -7,16 +7,21 @@ export interface ChartData {
 }
 
 export const getPieChartData = (
-  teams: { [id: string]: Team } = {}
+  teams: { [id: string]: Team } = {},
+  selectedTeam?: Team
 ): ChartData[] => {
-  return Object.keys(teams).reduce((acc: ChartData[], key: string) => {
-    for (let channel in teams[key].channels) {
-      const channelObj = teams[key].channels;
+  const teamsToIterate = selectedTeam
+    ? { [selectedTeam.id]: teams[selectedTeam.id] }
+    : teams;
+
+  return Object.keys(teamsToIterate).reduce((acc: ChartData[], key: string) => {
+    for (let channel in teamsToIterate[key].channels) {
+      const channelObj = teamsToIterate[key].channels;
 
       acc.push({
         name: channelObj?.[channel].displayName,
         value: channelObj?.[channel].totalActiveHours,
-        metaData: teams[key].displayName,
+        metaData: teamsToIterate[key].displayName,
       });
     }
 

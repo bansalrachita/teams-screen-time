@@ -8,23 +8,31 @@ export interface UserBarChartData {
 }
 
 export const getBarChartData = (
-  teams: { [id: string]: Team } = {}
+  teams: { [id: string]: Team } = {},
+  selectedTeam?: Team
 ): UserBarChartData[] => {
-  return Object.keys(teams).reduce((acc: UserBarChartData[], key: string) => {
-    for (let channel in teams[key].channels) {
-      const channelObj = teams[key].channels;
-      const teamName = teams[key].displayName;
+  const teamsToIterate = selectedTeam
+    ? { [selectedTeam.id]: teams[selectedTeam.id] }
+    : teams;
 
-      acc.push({
-        teamName,
-        name: channelObj?.[channel].displayName,
-        totalReadHours:
-          channelObj?.[channel].totalActiveHours -
-          channelObj?.[channel].totalWriteHours,
-        totalWriteHours: channelObj?.[channel].totalWriteHours,
-      });
-    }
+  return Object.keys(teamsToIterate).reduce(
+    (acc: UserBarChartData[], key: string) => {
+      for (let channel in teamsToIterate[key].channels) {
+        const channelObj = teamsToIterate[key].channels;
+        const teamName = teamsToIterate[key].displayName;
 
-    return acc;
-  }, []);
+        acc.push({
+          teamName,
+          name: channelObj?.[channel].displayName,
+          totalReadHours:
+            channelObj?.[channel].totalActiveHours -
+            channelObj?.[channel].totalWriteHours,
+          totalWriteHours: channelObj?.[channel].totalWriteHours,
+        });
+      }
+
+      return acc;
+    },
+    []
+  );
 };
