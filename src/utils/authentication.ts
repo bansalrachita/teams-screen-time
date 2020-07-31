@@ -2,7 +2,7 @@ import * as microsoftTeams from '@microsoft/teams-js';
 
 class Authentication {
   private _accessToken: string | undefined = undefined;
-  public readonly resources: string[] = ['https://6b39cfebe5a6.ngrok.io'];
+  public readonly resources: string[] = [process.env.REACT_APP_API_URL!];
 
   public initialize = async (callback: (val?: string) => void) => {
     try {
@@ -46,8 +46,8 @@ class Authentication {
             const url =
               'https://login.microsoftonline.com/' + tid + '/oauth2/v2.0/token';
             const params = {
-              client_id: '625ae2e7-df68-48d2-b538-50eeed288578',
-              client_secret: 'tA1HdHx~uy8yW.I-fc2XYxi1jOk5--.dbR',
+              client_id: process.env.REACT_APP_CLIENT_APP_ID,
+              client_secret: process.env.REACT_APP_CLIENT_SECRET,
               grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
               assertion: token,
               requested_token_use: 'on_behalf_of',
