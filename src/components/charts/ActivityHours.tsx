@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Flex, Header, Tooltip } from '@fluentui/react-northstar';
+import moment from 'moment';
 
 const getContent = (data: number[]) => {
   const min = Math.min(...data, 0);
@@ -8,7 +9,7 @@ const getContent = (data: number[]) => {
   const range = Math.max(max - min, 1);
 
   const brightness = getBrightness(range);
-
+  const today = moment.utc(new Date());
   return Array(7 * 24)
     .fill('')
     .map((_value, index) => {
@@ -26,7 +27,10 @@ const getContent = (data: number[]) => {
               }}
             />
           }
-          content={`Active hours: ${data[index] ?? 0}`}
+          content={`Active hours on ${moment
+            .utc(new Date())
+            .subtract(index, 'hours')
+            .format('LL')}:  ${data[index] ?? 0}`}
         />
       );
     });

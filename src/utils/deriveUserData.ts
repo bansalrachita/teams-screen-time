@@ -44,9 +44,11 @@ export interface Chat {
 
 export const users: { [id: string]: User } = {};
 
-const getHourOfDay = (time: string) => {
+const hourOfWeek = (time: string) => {
   const hourOfDayInUTC = moment(time).hours();
-  return hourOfDayInUTC;
+  const dayOftheWeek = moment(time).day();
+  const hourOfTheWeek = 24 * dayOftheWeek + hourOfDayInUTC;
+  return hourOfTheWeek;
 };
 
 export const deriveUserData = (
@@ -54,14 +56,17 @@ export const deriveUserData = (
   metaData: { [name: string]: string },
   userObjectId: string
 ) => {
+  const lastWeek = moment.utc(new Date()).subtract(1, 'week').format();
+
   for (let element of messageData.value) {
+    // if (element.createdDateTime >= lastWeek) {
     let user: User = {
       id: '',
     };
     const userId: string = element.from.user.id;
     const teamId: string = element.channelIdentity.teamId;
     const channelId: string = element.channelIdentity.channelId;
-    const activeHour = getHourOfDay(
+    const activeHour = hourOfWeek(
       element.lastModifiedDateTime ?? element.createdDateTime
     );
     const message = element.body.content;
@@ -74,7 +79,7 @@ export const deriveUserData = (
       user.id = userId;
       user.displayName = element.from.user.displayName;
       user.teams = {};
-      user.activeHours = Array(24).fill(0);
+      user.activeHours = Array(24 * 7).fill(0);
       users[userId] = user;
     }
 
@@ -84,7 +89,7 @@ export const deriveUserData = (
 
     // If team doesn't exist.
     if (user.teams && !user.teams?.[teamId]) {
-      const activeHours = Array(24).fill(0);
+      const activeHours = Array(24 * 7).fill(0);
       activeHours[activeHour] = messageWriteTime;
 
       user.teams[teamId] = {
@@ -106,7 +111,7 @@ export const deriveUserData = (
       const channel: Channel = user.teams[teamId].channels[channelId];
 
       if (!channel) {
-        const activeHours = Array(24).fill(0);
+        const activeHours = Array(24 * 7).fill(0);
         activeHours[activeHour] = messageWriteTime;
 
         user.teams[teamId].activeHours += messageWriteTime;
@@ -126,9 +131,11 @@ export const deriveUserData = (
         channel.totalWriteHours += messageWriteTime;
       }
     }
+    // }
   }
 
   for (let element of messageData.value) {
+    // if (element.createdDateTime >= lastWeek) {
     const userId: string = element.from.user.id;
 
     if (users[userId].id !== userObjectId) {
@@ -146,6 +153,7 @@ export const deriveUserData = (
         userTeam.activeHours += messageReadTime;
       }
     }
+    // }
   }
 };
 
@@ -176,11 +184,11 @@ export const deriveChatUserData = (chats: any, userObjectId: string) => {
       };
       const userId: string = element.from.user.id;
       user.id = userId;
-      user.activeHours = Array(24).fill(0);
+      user.activeHours = Array(24 * 7).fill(0);
       users[userObjectId] = user;
     }
 
-    const activeHour = getHourOfDay(
+    const activeHour = hourOfWeek(
       element.lastModifiedDateTime ?? element.createdDateTime
     );
 

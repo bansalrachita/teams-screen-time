@@ -17,8 +17,8 @@ export const getBarChartData = (
 
   return Object.keys(teamsToIterate).reduce(
     (acc: UserBarChartData[], key: string) => {
-      for (let channel in teamsToIterate[key].channels) {
-        const channelObj = teamsToIterate[key].channels;
+      for (let channel in teamsToIterate[key]?.channels) {
+        const channelObj = teamsToIterate[key]?.channels;
         const teamName = teamsToIterate[key].displayName;
 
         acc.push({

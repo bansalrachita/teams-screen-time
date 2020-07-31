@@ -25,6 +25,7 @@ export const Tab: React.FC = () => {
   const { data: usersData, fetchResult: fetchUserData } = useGetUserData(
     userId
   );
+  console.log('usersData: ', usersData);
   const usersTeamsData = usersData?.teams;
 
   useEffect(() => {

@@ -15,8 +15,8 @@ export const getPieChartData = (
     : teams;
 
   return Object.keys(teamsToIterate).reduce((acc: ChartData[], key: string) => {
-    for (let channel in teamsToIterate[key].channels) {
-      const channelObj = teamsToIterate[key].channels;
+    for (let channel in teamsToIterate[key]?.channels) {
+      const channelObj = teamsToIterate[key]?.channels;
 
       acc.push({
         name: channelObj?.[channel].displayName,
