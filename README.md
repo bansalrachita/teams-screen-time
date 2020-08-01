@@ -3,30 +3,45 @@
 An application that captures user's activity on Teams like personal chats, chats/posts in channels and gives meaniful insights to the user about their usage and personal contributions within Teams.
 
 
+![Giff showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-time-analyzer/master/public/images/ezgif.com-video-to-gif.gif?token=ACM7R7SYI6RADLC2FYRFABK7EUL6O
+"Active Hours")
+
 
 ## Tools and technologies
 
 - [VScode Teams toolkit](https://marketplace.visualstudio.com/items?itemName=TeamsDevApp.ms-teams-vscode-extension)
 - [M365 developer account](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/prepare-your-o365-tenant)
 - Teams SSO (OBO flow)
-- Personal app (Teams extensibility)
-- Azure AAD
+- Personal app (using Teams Extensibility Framework)
+- Azure AAD (Azure Active Directory)
 - MS Graph APIs
-- ngrok.io
+- Ngrok
 - NodeJS
+- ReactJS
 
 ## Pre-requisites
 
 - Download and install ngrok from the web.
-- Run ngrok.exe on port 3333. ngrok will tunnel the web request to your localhost and terminate the SSL connection from Teams.
+- Run `ngrok.exe` on port `3333`. ngrok will tunnel the web request to your localhost and terminate the SSL connection from Teams.
 - Replace the subdomain in manifest file in the publish folder.
-- Upload the new zipped folder in [Teams](https://teams.microsoft.com).
-- Create a 3rd party app using your MS developer account OR
-- Replace the subdomain in AAD app registration -> Authentication tab.
+- Create a 3rd party app using your MS developer account.
+- Replace the subdomain in AAD app registration -> Authentication tab with the one that's  created by ngrok.
 
 ## Tabs
 
 Tabs are Teams-aware webpages embedded in Microsoft Teams. Personal tabs are scoped to a single user. They can be pinned to the left navigation bar for easy access.
+
+**Teams screen time**
+
+Teams screen time is a personal app that gets user's chats personal or in channels and calculates users active hours. It shows these stats using a graphical view of hourly representation of the data during the week.
+
+![Image showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-time-analyzer/master/public/images/teams-screen-time.png?token=ACM7R7R2JBKDA573JG3Q7XS7EUMEI
+"Active Hours")
+
+It also compares read/write times of a user's engagement across his/her teams and allows filtering for channels inside a team.
+
+
+![Image showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-time-analyzer/master/public/images/teams-screen-time-2.png?token=ACM7R7V6HV33F3ML67HEZWK7EUMCO "Image showing active hours")
 
 #### Create an app on Azure
 
@@ -87,3 +102,7 @@ Expose an API -> replace Application ID URL subdomain with the one you generated
 **Upload app from the Teams client**
 
 - You can also upload the `Development.zip` from the _.publish_ folder to Teams - [Upload a custom app](https://aka.ms/teams-toolkit-uploadapp)
+
+### Improvements:
+- Storing the users data in localstorage and caching for better performance on the client.
+- Collecting other information like media exchanges, most discussed topics, granularity of details view of active hours per channel etc.
