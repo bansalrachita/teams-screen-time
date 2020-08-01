@@ -1,6 +1,6 @@
 # Teams screen time
 
-An application that captures user's activity on Teams like personal chats, chats/posts in channels and gives meaniful insights to the user about their usage and personal contributions within Teams.
+An application that captures logged in user's activity on Teams like personal chats, chats/posts in channels and gives the user a personaized view of meaniful insights about their usage and contributions within Teams over the past week.
 
 
 ![Giff showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-time-analyzer/master/public/images/ezgif.com-video-to-gif.gif?token=ACM7R7VABIIU4PHUZJKQAAS7EURNG
