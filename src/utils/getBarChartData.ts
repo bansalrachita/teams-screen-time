@@ -3,8 +3,8 @@ import { Team } from './deriveUserData';
 export interface UserBarChartData {
   name: string;
   teamName: string;
-  totalReadHours: number;
-  totalWriteHours: number;
+  totalReadTime: number;
+  totalWriteTime: number;
 }
 
 export const getBarChartData = (
@@ -24,10 +24,10 @@ export const getBarChartData = (
         acc.push({
           teamName,
           name: channelObj?.[channel].displayName,
-          totalReadHours:
+          totalReadTime:
             channelObj?.[channel].totalActiveHours -
-            channelObj?.[channel].totalWriteHours,
-          totalWriteHours: channelObj?.[channel].totalWriteHours,
+            channelObj?.[channel].totalWriteTime,
+          totalWriteTime: channelObj?.[channel].totalWriteTime,
         });
       }
 

@@ -29,7 +29,7 @@
   "staticTabs": [
     {
       "entityId": "index",
-      "name": "Personal Tab",
+      "name": "Activity Overview",
       "contentUrl": "{baseUrl0}/tab",
       "scopes": ["personal"]
     }

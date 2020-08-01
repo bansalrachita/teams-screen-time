@@ -10,7 +10,7 @@ export interface Team {
 export interface Channel {
   id: string;
   totalActiveHours: number;
-  totalWriteHours: number;
+  totalWriteTime: number;
   activeHours: number[];
   displayName: string;
 }
@@ -59,101 +59,101 @@ export const deriveUserData = (
   const lastWeek = moment.utc(new Date()).subtract(1, 'week').format();
 
   for (let element of messageData.value) {
-    // if (element.createdDateTime >= lastWeek) {
-    let user: User = {
-      id: '',
-    };
-    const userId: string = element.from.user.id;
-    const teamId: string = element.channelIdentity.teamId;
-    const channelId: string = element.channelIdentity.channelId;
-    const activeHour = hourOfWeek(
-      element.lastModifiedDateTime ?? element.createdDateTime
-    );
-    const message = element.body.content;
-    const messageWriteTime = calculateMessageWriteTime(message);
-
-    // If user exists
-    if (users[userId]) {
-      user = users[userId];
-    } else {
-      user.id = userId;
-      user.displayName = element.from.user.displayName;
-      user.teams = {};
-      user.activeHours = Array(24 * 7).fill(0);
-      users[userId] = user;
-    }
-
-    if (user.activeHours) {
-      user.activeHours[activeHour] += messageWriteTime;
-    }
-
-    // If team doesn't exist.
-    if (user.teams && !user.teams?.[teamId]) {
-      const activeHours = Array(24 * 7).fill(0);
-      activeHours[activeHour] = messageWriteTime;
-
-      user.teams[teamId] = {
-        activeHours: messageWriteTime,
-        id: teamId,
-        displayName: metaData.teamName,
-        channels: {
-          [channelId]: {
-            id: channelId,
-            activeHours,
-            totalActiveHours: messageWriteTime,
-            totalWriteHours: messageWriteTime,
-            displayName: metaData.channelName,
-          },
-        },
+    if (element.createdDateTime >= lastWeek) {
+      let user: User = {
+        id: '',
       };
-      // If team exists but no channel.
-    } else if (user.teams?.[teamId]) {
-      const channel: Channel = user.teams[teamId].channels[channelId];
+      const userId: string = element.from.user.id;
+      const teamId: string = element.channelIdentity.teamId;
+      const channelId: string = element.channelIdentity.channelId;
+      const activeHour = hourOfWeek(
+        element.lastModifiedDateTime ?? element.createdDateTime
+      );
+      const message = element.body.content;
+      const messageWriteTime = calculateMessageWriteTime(message);
 
-      if (!channel) {
+      // If user exists
+      if (users[userId]) {
+        user = users[userId];
+      } else {
+        user.id = userId;
+        user.displayName = element.from.user.displayName;
+        user.teams = {};
+        user.activeHours = Array(24 * 7).fill(0);
+        users[userId] = user;
+      }
+
+      if (user.activeHours) {
+        user.activeHours[activeHour] += messageWriteTime;
+      }
+
+      // If team doesn't exist.
+      if (user.teams && !user.teams?.[teamId]) {
         const activeHours = Array(24 * 7).fill(0);
         activeHours[activeHour] = messageWriteTime;
 
-        user.teams[teamId].activeHours += messageWriteTime;
-
-        user.teams[teamId].channels[channelId] = {
-          id: channelId,
-          activeHours,
-          totalActiveHours: messageWriteTime,
-          totalWriteHours: messageWriteTime,
-          displayName: metaData.channelName,
+        user.teams[teamId] = {
+          activeHours: messageWriteTime,
+          id: teamId,
+          displayName: metaData.teamName,
+          channels: {
+            [channelId]: {
+              id: channelId,
+              activeHours,
+              totalActiveHours: messageWriteTime,
+              totalWriteTime: messageWriteTime,
+              displayName: metaData.channelName,
+            },
+          },
         };
-        // if channel exists.
-      } else if (!channel.activeHours[activeHour]) {
-        user.teams[teamId].activeHours += messageWriteTime;
-        channel.activeHours[activeHour] += messageWriteTime;
-        channel.totalActiveHours += messageWriteTime;
-        channel.totalWriteHours += messageWriteTime;
+        // If team exists but no channel.
+      } else if (user.teams?.[teamId]) {
+        const channel: Channel = user.teams[teamId].channels[channelId];
+
+        if (!channel) {
+          const activeHours = Array(24 * 7).fill(0);
+          activeHours[activeHour] = messageWriteTime;
+
+          user.teams[teamId].activeHours += messageWriteTime;
+
+          user.teams[teamId].channels[channelId] = {
+            id: channelId,
+            activeHours,
+            totalActiveHours: messageWriteTime,
+            totalWriteTime: messageWriteTime,
+            displayName: metaData.channelName,
+          };
+          // if channel exists.
+        } else if (!channel.activeHours[activeHour]) {
+          user.teams[teamId].activeHours += messageWriteTime;
+          channel.activeHours[activeHour] += messageWriteTime;
+          channel.totalActiveHours += messageWriteTime;
+          channel.totalWriteTime += messageWriteTime;
+        }
       }
     }
-    // }
   }
 
   for (let element of messageData.value) {
-    // if (element.createdDateTime >= lastWeek) {
-    const userId: string = element.from.user.id;
+    if (element.createdDateTime >= lastWeek) {
+      const userId: string = element.from.user.id;
 
-    if (users[userId].id !== userObjectId) {
-      const teamId: string = element.channelIdentity.teamId;
-      const channelId: string = element.channelIdentity.channelId;
-      const message = element.body.content;
-      const messageReadTime = calculateMessageReadTime(message);
-      // if there some user activity in the team and channel
-      const userChannel =
-        users[userObjectId]?.teams?.[teamId]?.channels?.[channelId];
-      const userTeam = users[userObjectId]?.teams?.[teamId];
+      if (users[userId].id !== userObjectId) {
+        const teamId: string = element.channelIdentity.teamId;
+        const channelId: string = element.channelIdentity.channelId;
+        const message = element.body.content;
+        const messageReadTime = calculateMessageReadTime(message);
+        // if there some user activity in the team and channel
+        const userChannel =
+          users[userObjectId]?.teams?.[teamId]?.channels?.[channelId];
+        const userTeam = users[userObjectId]?.teams?.[teamId];
 
-      if (userChannel && userTeam) {
-        userChannel.totalActiveHours += messageReadTime;
-        userTeam.activeHours += messageReadTime;
+        if (userChannel && userTeam) {
+          userChannel.totalActiveHours += messageReadTime;
+          userTeam.activeHours += messageReadTime;
+        }
       }
     }
-    // }
   }
 };
 

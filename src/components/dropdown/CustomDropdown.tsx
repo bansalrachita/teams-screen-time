@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import {
   Dropdown,
   DropdownItem,
-  DropdownSelectedItem,
+  ICSSInJSStyle,
 } from '@fluentui/react-northstar';
 
 interface CustomDropdownProps {
@@ -13,6 +13,7 @@ interface CustomDropdownProps {
   clearable?: boolean;
   onChange?: (data: any) => void;
   value?: any;
+  styles?: ICSSInJSStyle;
 }
 
 export const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -23,6 +24,7 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
   clearable = false,
   value,
   onChange,
+  styles,
 }) => {
   const onChangeSelect = useCallback(
     (_event, data) => {
@@ -37,12 +39,15 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
         <DropdownItem content={uniqueKey ? data[uniqueKey] : data} {...data} />
       );
     },
-    [uniqueKey, onChangeSelect]
+    [uniqueKey]
   );
 
-  const itemToString = useCallback((item) => {
-    return uniqueKey && item ? item[uniqueKey] : item ? item : '';
-  }, []);
+  const itemToString = useCallback(
+    (item) => {
+      return uniqueKey && item ? item[uniqueKey] : item ? item : '';
+    },
+    [uniqueKey]
+  );
 
   return (
     <Dropdown
@@ -57,6 +62,7 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
       value={value ?? undefined}
       onChange={onChangeSelect}
       clearable={clearable}
+      styles={styles}
     />
   );
 };

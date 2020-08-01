@@ -3,7 +3,7 @@ import { useGetChannelByTeams } from '../../utils/useGetChannelsByTeams';
 import { CustomPieChart } from '../charts/CustomPieCharts';
 import { CustomDropdown } from '../dropdown/CustomDropdown';
 import { useTeamsContext } from '../../utils/useThemeContext';
-import { Flex, Header, Loader } from '@fluentui/react-northstar';
+import { Flex, Header, Loader, Text } from '@fluentui/react-northstar';
 import { CustomBarChart } from '../charts/CustomBarChart';
 import { ActivityHours } from '../charts/ActivityHours';
 import { getPieChartData } from '../../utils/getPieChartData';
@@ -25,7 +25,6 @@ export const Tab: React.FC = () => {
   const { data: usersData, fetchResult: fetchUserData } = useGetUserData(
     userId
   );
-  console.log('usersData: ', usersData);
   const usersTeamsData = usersData?.teams;
 
   useEffect(() => {
@@ -67,9 +66,11 @@ export const Tab: React.FC = () => {
   }
 
   return (
-    <Flex styles={{ padding: '30px' }} column>
+    <Flex styles={{ padding: '30px' }} column fill gap="gap.large">
+      <ActivityHours data={usersData?.activeHours ?? []} />
       <Header content="Channel activity" />
-      <Flex gap="gap.medium">
+      <Text content="Time spent over the last week in channel engagements across teams." />
+      <Flex fill gap="gap.medium">
         <CustomDropdown
           inputItems={teamsAndChannelsData}
           uniqueKey="displayName"
@@ -86,14 +87,13 @@ export const Tab: React.FC = () => {
           onChange={onChangeTime}
         />
       </Flex>
-      <Flex gap="gap.medium" vAlign="center" hAlign="start">
+      <Flex gap="gap.small" vAlign="center" hAlign="start">
         <CustomPieChart data={channelsPieChartData} />
         <CustomBarChart
           data={channelsBarChartData}
-          stackDataKeys={['totalWriteHours', 'totalReadHours']}
+          stackDataKeys={['totalWriteTime', 'totalReadTime']}
         />
       </Flex>
-      <ActivityHours data={usersData?.activeHours ?? []} />
     </Flex>
   );
 };

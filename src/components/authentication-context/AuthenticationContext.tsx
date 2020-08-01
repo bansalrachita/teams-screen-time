@@ -24,7 +24,7 @@ export const AuthenticationProvider: React.FC<AuthenticationProvideProps> = ({
 
   if (!teamsAuthentication.getAccessToken()) {
     return (
-      <Flex vAlign="center" hAlign="center" styles={{ heihgt: '100%' }}>
+      <Flex vAlign="center" hAlign="center" fill styles={{ heigt: '100%' }}>
         <Loader />
       </Flex>
     );

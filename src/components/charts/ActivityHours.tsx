@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Flex, Header, Tooltip } from '@fluentui/react-northstar';
+import { Grid, Flex, Header, Tooltip, Text } from '@fluentui/react-northstar';
 import moment from 'moment';
 
 const getContent = (data: number[]) => {
@@ -9,7 +9,6 @@ const getContent = (data: number[]) => {
   const range = Math.max(max - min, 1);
 
   const brightness = getBrightness(range);
-  const today = moment.utc(new Date());
   return Array(7 * 24)
     .fill('')
     .map((_value, index) => {
@@ -27,10 +26,20 @@ const getContent = (data: number[]) => {
               }}
             />
           }
-          content={`Active hours on ${moment
-            .utc(new Date())
-            .subtract(index, 'hours')
-            .format('LL')}:  ${data[index] ?? 0}`}
+          content={
+            <Flex column>
+              <Text
+                content={`Active hours on ${moment
+                  .utc(new Date())
+                  .subtract(index, 'hours')
+                  .format('LL')}:`}
+              />
+              <Text
+                weight="semibold"
+                content={`${data[index]?.toFixed(2) ?? 0} mins`}
+              />
+            </Flex>
+          }
         />
       );
     });
@@ -46,7 +55,15 @@ const colHeader = Array(24)
 
 const colRows = Array(7)
   .fill(0)
-  .map((_, index) => <span key={`$rowHeader-${index}`}>Day {index}</span>);
+  .map((_, index) => (
+    <Text
+      content={`${moment
+        .utc(new Date())
+        .subtract(index, 'days')
+        .format('dddd')
+        .substring(0, 3)}`}
+    />
+  ));
 
 interface ActivityHours {
   data: number[];
@@ -59,30 +76,46 @@ const getBrightness = (range: number) => (value: number): string => {
 
 export const ActivityHours: React.FC<ActivityHours> = ({ data }) => {
   return (
-    <>
-      <div>
+    <Flex column fill>
+      <Flex column>
         <Header content="Active hours" />
-      </div>
-      <Grid
-        content={colHeader}
-        style={{
-          gridTemplateColumns: 'repeat(24, 50px)',
-          msGridColumns: '(50px)[24]',
-          width: '80%',
-          margin: '0 auto',
-        }}
-      />
-      <Grid
-        style={{
-          gridTemplateColumns: 'repeat(24, 50px)',
-          msGridColumns: '(50px)[24]',
-          height: '200px',
-          width: '80%',
-          margin: '0 auto',
-        }}
-        columns={24}
-        content={getContent(data)}
-      />
-    </>
+        <Text content="Time spent over the last week that includes personal/group chats and engagement in channels across teams." />
+      </Flex>
+      <Flex column>
+        <Grid
+          content={colHeader}
+          style={{
+            gridTemplateColumns: 'repeat(24, 30px)',
+            msGridColumns: '(30px)[24]',
+            width: '50%',
+            marginLeft: '125px',
+            paddingTop: '30px',
+          }}
+        />
+        <Flex>
+          <Grid
+            style={{
+              gridTemplateRows: 'repeat(7, 30px)',
+              msGridRows: '(30px)[7]',
+              height: '200px',
+              width: '35px',
+            }}
+            rows={7}
+            content={colRows}
+          />
+          <Grid
+            style={{
+              gridTemplateColumns: 'repeat(24, 30px)',
+              msGridColumns: '(30px)[24]',
+              height: '200px',
+              width: '50%',
+              marginLeft: '90px',
+            }}
+            columns={24}
+            content={getContent(data)}
+          />
+        </Flex>
+      </Flex>
+    </Flex>
   );
 };
