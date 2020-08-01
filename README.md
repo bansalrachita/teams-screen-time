@@ -13,7 +13,7 @@ An application that captures logged in user's activity on Teams like personal ch
 - [M365 developer account](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/prepare-your-o365-tenant)
 - Teams SSO (OBO flow)
 - Personal app (using Teams Extensibility Framework)
-- Azure AAD (Azure Active Directory)
+- Azure AD (Azure Active Directory)
 - MS Graph APIs
 - Ngrok
 - NodeJS
