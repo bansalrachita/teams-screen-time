@@ -3,7 +3,7 @@
 An application that captures logged in user's activity on Teams like personal chats, chats/posts in channels and gives the user a personaized view of meaniful insights about their usage and contributions within Teams over the past week.
 
 
-![Giff showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-time-analyzer/master/public/images/ezgif.com-video-to-gif.gif?token=ACM7R7VABIIU4PHUZJKQAAS7EURNG
+![Giff showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-screen-time/master/public/images/ezgif.com-video-to-gif.gif?token=ACM7R7U3OE2SHNZBCAQQ7PC7EUSDS
 "Active Hours")
 
 
@@ -35,13 +35,13 @@ Tabs are Teams-aware webpages embedded in Microsoft Teams. Personal tabs are sco
 
 Teams screen time is a personal app that gets user's chats personal or in channels and calculates users active hours. It shows these stats using a graphical view of hourly representation of the data during the week.
 
-![Image showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-time-analyzer/master/public/images/teams-screen-time.png?token=ACM7R7UTDCTLGSCMZUTKQSK7EURLI
+![Image showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-screen-time/master/public/images/teams-screen-time.png?token=ACM7R7XPOGMCPLY3ANFPNQK7EUSEW
 "Active Hours")
 
 It also compares read/write times of a user's engagement across his/her teams and allows filtering for channels inside a team.
 
 
-![Image showing channel activity!](https://raw.githubusercontent.com/bansalrachita/teams-time-analyzer/master/public/images/teams-screen-time-2.png?token=ACM7R7VQ7JFUYH7ZYSRBZD27EURBK "Image showing channel activity")
+![Image showing channel activity!](https://raw.githubusercontent.com/bansalrachita/teams-screen-time/master/public/images/teams-screen-time-2.png?token=ACM7R7U4WDJLIZBCEY6QBMC7EUSEC "Image showing channel activity")
 
 #### Create an app on Azure
 
