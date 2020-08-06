@@ -2,10 +2,7 @@
 
 An application that captures logged in user's activity on Teams like personal chats, chats/posts in channels and gives the user a personaized view of meaniful insights about their usage and contributions within Teams over the past week.
 
-
-![Giff showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-screen-time/master/public/images/ezgif.com-video-to-gif.gif?token=ACM7R7U3OE2SHNZBCAQQ7PC7EUSDS
-"Active Hours")
-
+![Giff showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-screen-time/master/public/images/ezgif.com-video-to-gif.gif?token=ACM7R7U3OE2SHNZBCAQQ7PC7EUSDS 'Active Hours')
 
 ## Tools and technologies
 
@@ -25,7 +22,8 @@ An application that captures logged in user's activity on Teams like personal ch
 - Run `ngrok.exe` on port `3333`. ngrok will tunnel the web request to your localhost and terminate the SSL connection from Teams.
 - Replace the subdomain in manifest file in the publish folder.
 - Create a 3rd party app using your MS developer account.
-- Replace the subdomain in AAD app registration -> Authentication tab with the one that's  created by ngrok.
+- Replace the subdomain in AAD app registration -> Authentication tab with the one that's created by ngrok.
+- Add the env variables `REACT_APP_API_URL` and `REACT_APP_CLIENT_SECRET` and copy the client secret value from Certificates & Secrets tab in Azure AD.
 
 ## Tabs
 
@@ -35,13 +33,11 @@ Tabs are Teams-aware webpages embedded in Microsoft Teams. Personal tabs are sco
 
 Teams screen time is a personal app that gets user's chats personal or in channels and calculates users active hours. It shows these stats using a graphical view of hourly representation of the data during the week.
 
-![Image showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-screen-time/master/public/images/teams-screen-time.png?token=ACM7R7XPOGMCPLY3ANFPNQK7EUSEW
-"Active Hours")
+![Image showing active hours!](https://raw.githubusercontent.com/bansalrachita/teams-screen-time/master/public/images/teams-screen-time.png?token=ACM7R7XPOGMCPLY3ANFPNQK7EUSEW 'Active Hours')
 
 It also compares read/write times of a user's engagement across his/her teams and allows filtering for channels inside a team.
 
-
-![Image showing channel activity!](https://raw.githubusercontent.com/bansalrachita/teams-screen-time/master/public/images/teams-screen-time-2.png?token=ACM7R7U4WDJLIZBCEY6QBMC7EUSEC "Image showing channel activity")
+![Image showing channel activity!](https://raw.githubusercontent.com/bansalrachita/teams-screen-time/master/public/images/teams-screen-time-2.png?token=ACM7R7U4WDJLIZBCEY6QBMC7EUSEC 'Image showing channel activity')
 
 #### Create an app on Azure
 
@@ -51,12 +47,13 @@ It also compares read/write times of a user's engagement across his/her teams an
 - Add an application ID URL and allow Teams client to access Graph APIs on signed users behalf (on behalf flow)
 - You can make the app multi tenant or Single tenant based on your use case.
 - Goto API permission and add the necessary permissions required by the user to access information through Graph APIs.
+- Goto Certificates & secrets in Azure AD and add a new secret for the app. Copy the value of the secret and keep it at a safe place because this is the only time the client secret value is visible to you for copying.
 
 #### App permissions
 
-Goto to Azure AD -> App registrations and add the needed permissions for the app to be able to access user's data like their joined teams, channels, channel messages and personal chats. On behalf of user flow requires the consent of the tenant admin for these permissions before Teams can actually get a token that has the said scopes on behalf of the user. 
+Goto to Azure AD -> App registrations and add the needed permissions for the app to be able to access user's data like their joined teams, channels, channel messages and personal chats. On behalf of user flow requires the consent of the tenant admin for these permissions before Teams can actually get a token that has the said scopes on behalf of the user.
 
-*This is also a known limitation of the app.*
+_This is also a known limitation of the app._
 
 #### Expose an API
 
@@ -65,9 +62,9 @@ Goto Azure AD -> App registrations -> choose your app name -> Expose an API.
 Add an App ID URI if it's not present. An App ID URI usually looks like this - `api://<app-subdomain>.example.com/<app-client-id>`
 
 Add the Teams client IDs to the API:
+
 - Desktop/mobile client: `1fec8e78-bce4-4aaf-ab1b-5451cc387264`
 - Web client: `5e3ce6c0-2b1f-4285-8d4b-75ee78787346`
-
 
 ### Build and Run
 
@@ -104,5 +101,6 @@ Expose an API -> replace Application ID URL subdomain with the one you generated
 - You can also upload the `Development.zip` from the _.publish_ folder to Teams - [Upload a custom app](https://aka.ms/teams-toolkit-uploadapp)
 
 ### Improvements:
+
 - Storing the users data in localstorage and caching for better performance on the client.
 - Collecting other information like media exchanges, most discussed topics, granularity of details view of active hours per channel etc.

@@ -37,49 +37,36 @@ class Authentication {
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       microsoftTeams.getContext(async (context) => {
-        const tid = context.tid;
-        const token = clientSideToken;
-        const scopes = ['https://graph.microsoft.com/User.Read'];
-
-        const oboPromise = async (): Promise<string> => {
-          return new Promise((res, rej) => {
-            const url =
-              'https://login.microsoftonline.com/' + tid + '/oauth2/v2.0/token';
-            const params = {
-              client_id: process.env.REACT_APP_CLIENT_APP_ID,
-              client_secret: process.env.REACT_APP_CLIENT_SECRET,
-              grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-              assertion: token,
-              requested_token_use: 'on_behalf_of',
-              scope: scopes.join(' '),
-            };
-
-            fetch(url, {
-              method: 'POST',
-              body: `client_id=${params.client_id}&client_secret=${params.client_secret}&grant_type=${params.grant_type}&assertion=${token}&requested_token_use=${params.requested_token_use}&scope=${params.scope}`,
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                mode: 'cors',
-              },
-            }).then((result) => {
-              if (result.status !== 200) {
-                result.json().then((json) => {
-                  // TODO: Check explicitly for invalid_grant or interaction_required
-                  rej(json.error);
-                });
-              } else {
-                result.json().then((json) => {
-                  res(json.access_token);
-                });
-              }
-            });
-          });
-        };
-
         try {
-          const access_token = await oboPromise();
-          resolve(access_token);
+          const tid = context.tid;
+          const token = clientSideToken;
+
+          const url =
+            process.env.REACT_APP_API_URL +
+            ':' +
+            process.env.REACT_APP_API_PORT +
+            '/auth/token';
+          const params = {
+            token,
+            tid,
+          };
+
+          const result = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+          });
+
+          const json = await result.json();
+
+          if (result.status !== 200) {
+            reject(json.error);
+          } else {
+            resolve(json.access_token);
+          }
         } catch (error) {
           reject(error);
         }
@@ -102,7 +89,7 @@ class Authentication {
         failureCallback: (reason) => {
           const result = 'auth.result';
           let data = localStorage.getItem(result ?? '') ?? '';
-          this._accessToken = data;
+          this._accessToken = JSON.parse(data)?.accessToken;
           localStorage.removeItem(result ?? '');
           console.log('reason: ', reason);
           reject(JSON.stringify(reason));

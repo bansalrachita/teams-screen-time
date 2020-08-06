@@ -3,7 +3,7 @@
   "manifestVersion": "1.7",
   "version": "{version}",
   "id": "{appid}",
-  "packageName": "com.microsoft.teams.extension",
+  "packageName": "com.app.teams.screentime",
   "developer": {
     "name": "Rachita Bansal",
     "websiteUrl": "{baseUrl0}",
@@ -19,7 +19,7 @@
     "full": "{fullappname}"
   },
   "description": {
-    "short": "Short description for {appname}.",
+    "short": "{appname}",
     "full": "Full description of {appname} for Microsoft Teams."
   },
   "accentColor": "#FFFFFF",
