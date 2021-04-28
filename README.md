@@ -77,6 +77,8 @@ In the project directory, execute:
 In the directory where you have installed ngrok, execute:
 
 `.\ngrok.exe http 3333 --host-header=localhost`
+Or
+`.\ngrok.exe http -bind-tls=true localhost:3333`
 
 This will open up a tunnel for about 8 hrs and after that you need to repeat the command and depoly step given below.
 
