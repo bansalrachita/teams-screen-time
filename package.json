@@ -16,7 +16,7 @@
     "@microsoft/teams-js": "^1.7.0",
     "express": "^4.17.1",
     "moment": "^2.27.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "npm-run-all": "^4.1.5",
     "query-string-params": "^1.7.5",
     "react": "^16.13.1",
